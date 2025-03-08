@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Rain Fall Predictor</title>
+</head>
+<body>
+    <!-- Video Background -->
+    <video id="background-video" autoplay muted loop playsinline>
+        <source id="video-source" src="/static/default_background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="wrapper">
+        <div class="title">Rainfall Predictor</div>
+        <form action="/" method="POST">
+            <div class="form">    
+                <div class="inputfield">
+                    <label for="pressure">Pressure</label>
+                    <input class="input" type="text" name="pressure" required>
+                </div>
+                <div class="inputfield">
+                    <label for="dewpoint">Dewpoint</label>
+                    <input class="input" type="text" name="dewpoint" required>
+                </div>
+                <div class="inputfield">
+                    <label for="humidity">Humidity</label>
+                    <input class="input" type="text" name="humidity" required>
+                </div>
+                <div class="inputfield">
+                    <label for="cloud">Cloud</label>
+                    <input class="input" type="text" name="cloud" required>
+                </div>
+                <div class="inputfield">
+                    <label for="sunshine">Sunshine</label>
+                    <input class="input" type="text" name="sunshine" required>
+                </div>
+                <div class="inputfield">
+                    <label for="winddirection">Winddirection</label>
+                    <input class="input" type="text" name="winddirection" required>
+                </div>
+                <div class="inputfield">
+                    <label for="windspeed">Windspeed</label>
+                    <input class="input" type="text" name="windspeed" required>
+                </div>
+                
+                <div class="inputfield">
+                    <input class="btn" type="submit" value="Predict RainFall">
+                </div>
+            </div>
+        </form>
+
+        <div class="result">
+            <p id="result-message">
+                {% if pred_value == 1 %}
+                    Rainfall: Yes
+                {% else %}
+                    Rainfall: No
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- JavaScript to handle the background video -->
+    <script>
+        window.onload = function () {
+    // Set the default background initially
+    const videoSource = document.getElementById('video-source');
+    const video = document.getElementById('background-video');
+
+    // Check the prediction result and change the video accordingly
+    const predictionResult = "{{ 'rain' if pred_value == 1 else 'no_rain' }}";
+    if (predictionResult) {
+        if (predictionResult === 'rain') {
+            videoSource.src = "/static/rain_background.mp4";
+        } else {
+            videoSource.src = "/static/no_rain_background.mp4";
+        }
+
+        video.load();
+        video.play();
+    } else {
+        // Set the default background if no prediction result is available
+        videoSource.src = "/static/default_background.mp4";
+        video.load();
+        video.play();
+    }
+}
+    </script>
+</body>
+</html>
